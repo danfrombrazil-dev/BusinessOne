@@ -1,244 +1,189 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-const Section = ({ children, bg = "#fff", id }) => (
-  <section id={id} style={{ background: bg, padding: "60px 20px" }}>
-    <div style={{ maxWidth: "680px", margin: "0 auto" }}>{children}</div>
-  </section>
-);
+const C = { bg: "#0a0a0a", card: "#141414", accent: "#FF6B35", accent2: "#ff8c42", white: "#ffffff", gray: "#a0a0a0", green: "#22c55e", red: "#ef4444", yellow: "#eab308" };
 
-const CTA = ({ text = "Testar grátis agora →", onClick }) => (
-  <button onClick={onClick} style={{
-    width: "100%", maxWidth: "400px", padding: "18px 24px",
-    background: "linear-gradient(135deg, #FF6B35, #ff8c42)", color: "#fff",
-    border: "none", borderRadius: "16px", fontSize: "17px", fontWeight: "800",
-    cursor: "pointer", fontFamily: "'Sora', sans-serif",
-    boxShadow: "0 4px 24px rgba(255,107,53,0.4)",
-    transition: "transform 0.2s",
-    display: "block", margin: "0 auto"
-  }}
-    onMouseEnter={e => e.target.style.transform = "scale(1.03)"}
-    onMouseLeave={e => e.target.style.transform = "scale(1)"}
-  >{text}</button>
-);
+function Section({ children, style }) {
+  return <section style={{ padding: "80px 20px", maxWidth: 900, margin: "0 auto", ...style }}>{children}</section>;
+}
 
-const Check = ({ children }) => (
-  <div style={{ display: "flex", gap: "12px", alignItems: "flex-start", marginBottom: "16px" }}>
-    <span style={{ fontSize: "20px", lineHeight: 1 }}>✅</span>
-    <span style={{ fontSize: "15px", fontWeight: "600", color: "#333", lineHeight: 1.6 }}>{children}</span>
-  </div>
-);
-
-const FAQ = ({ q, a }) => {
+function FAQ({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div style={{ borderBottom: "1px solid #eee", padding: "16px 0" }}>
-      <div onClick={() => setOpen(!open)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }}>
-        <p style={{ margin: 0, fontSize: "15px", fontWeight: "700", color: "#1a1a1a" }}>{q}</p>
-        <span style={{ fontSize: "20px", color: "#FF6B35", transform: open ? "rotate(45deg)" : "rotate(0deg)", transition: "transform 0.2s" }}>+</span>
+    <div style={{ borderBottom: "1px solid #222", padding: "20px 0", cursor: "pointer" }} onClick={() => setOpen(!open)}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: 17, fontWeight: 600, color: C.white }}>{q}</span>
+        <span style={{ fontSize: 22, color: C.accent, transition: "transform .2s", transform: open ? "rotate(45deg)" : "rotate(0)" }}>+</span>
       </div>
-      {open && <p style={{ margin: "12px 0 0", fontSize: "14px", color: "#666", lineHeight: 1.7 }}>{a}</p>}
+      {open && <p style={{ marginTop: 12, color: C.gray, lineHeight: 1.7, fontSize: 15 }}>{a}</p>}
     </div>
   );
-};
+}
 
-import { useState } from "react";
+function Check({ children }) {
+  return <div style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 14 }}><span style={{ color: C.green, fontSize: 20, flexShrink: 0 }}>✓</span><span style={{ color: C.gray, fontSize: 15, lineHeight: 1.6 }}>{children}</span></div>;
+}
+
+function FeatureCard({ emoji, title, desc }) {
+  return (
+    <div style={{ background: C.card, borderRadius: 16, padding: 28, border: "1px solid #222", flex: "1 1 260px", minWidth: 260 }}>
+      <div style={{ fontSize: 32, marginBottom: 12 }}>{emoji}</div>
+      <h3 style={{ color: C.white, fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{title}</h3>
+      <p style={{ color: C.gray, fontSize: 14, lineHeight: 1.6, margin: 0 }}>{desc}</p>
+    </div>
+  );
+}
+
+function PainPoint({ emoji, text, value }) {
+  return (
+    <div style={{ background: "#1a0a0a", border: "1px solid #331111", borderRadius: 14, padding: 22, display: "flex", gap: 14, alignItems: "center" }}>
+      <span style={{ fontSize: 28 }}>{emoji}</span>
+      <div>
+        <p style={{ color: C.white, fontSize: 15, margin: 0, lineHeight: 1.5 }}>{text}</p>
+        {value && <p style={{ color: C.red, fontSize: 14, margin: "6px 0 0", fontWeight: 600 }}>{value}</p>}
+      </div>
+    </div>
+  );
+}
 
 export default function Landing() {
   const navigate = useNavigate();
   const goApp = () => navigate("/app");
+  const goPay = () => window.open("https://pay.kiwify.com.br/oi816Px", "_blank");
+
+  const btnStyle = { background: `linear-gradient(135deg, ${C.accent}, ${C.accent2})`, color: "#fff", border: "none", borderRadius: 14, padding: "18px 40px", fontSize: 18, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 24px rgba(255,107,53,.25)", transition: "transform .15s", display: "inline-block" };
+  const btnOutline = { ...btnStyle, background: "transparent", border: `2px solid ${C.accent}`, color: C.accent, boxShadow: "none" };
 
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-      <div style={{ fontFamily: "'Sora', sans-serif", color: "#1a1a1a" }}>
+      <div style={{ fontFamily: "'Sora',sans-serif", background: C.bg, color: C.white, minHeight: "100vh", overflowX: "hidden" }}>
 
         {/* HERO */}
-        <Section bg="linear-gradient(160deg, #0f0f0f 0%, #1a1205 100%)">
-          <div style={{ textAlign: "center", padding: "40px 0 20px" }}>
-            <p style={{ margin: "0 0 12px", fontSize: "13px", fontWeight: "700", color: "#FF6B35", letterSpacing: "0.12em", textTransform: "uppercase" }}>BusinessOne · Consultor Financeiro</p>
-            <h1 style={{ margin: "0 0 20px", fontSize: "32px", fontWeight: "800", color: "#fff", lineHeight: 1.25 }}>
-              Você sabe <span style={{ color: "#FF6B35" }}>exatamente</span> quanto precisa vender por dia?
-            </h1>
-            <p style={{ margin: "0 0 32px", fontSize: "16px", color: "rgba(255,255,255,0.7)", lineHeight: 1.7, maxWidth: "500px", marginLeft: "auto", marginRight: "auto" }}>
-              A maioria dos empreendedores trabalha no escuro — sem saber se o esforço do dia está sendo suficiente. Descubra sua meta real em 2 minutos com um diagnóstico personalizado pro seu negócio.
-            </p>
-            <CTA text="Fazer meu diagnóstico grátis →" onClick={goApp} />
-            <p style={{ margin: "16px 0 0", fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>Gratuito · Sem cadastro · Resultado imediato</p>
+        <Section style={{ paddingTop: 100, paddingBottom: 60, textAlign: "center" }}>
+          <div style={{ display: "inline-block", background: "#1a1a1a", border: "1px solid #333", borderRadius: 100, padding: "8px 20px", fontSize: 13, color: C.accent, fontWeight: 600, marginBottom: 24 }}>🎯 Consultor financeiro digital para seu negócio</div>
+          <h1 style={{ fontSize: "clamp(32px, 6vw, 56px)", fontWeight: 800, lineHeight: 1.15, marginBottom: 20, fontFamily: "'Space Grotesk',sans-serif" }}>
+            Descubra quanto você <span style={{ color: C.accent }}>precisa vender por dia</span> — e quanto está <span style={{ color: C.red }}>deixando na mesa</span>
+          </h1>
+          <p style={{ fontSize: 18, color: C.gray, maxWidth: 620, margin: "0 auto 36px", lineHeight: 1.7 }}>
+            Não é uma calculadora genérica. É um diagnóstico completo que mostra exatamente onde seu negócio está perdendo dinheiro — e te dá um plano pra resolver.
+          </p>
+          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+            <button onClick={goApp} style={btnStyle} onMouseEnter={e => e.target.style.transform = "scale(1.04)"} onMouseLeave={e => e.target.style.transform = "scale(1)"}>Fazer diagnóstico grátis</button>
           </div>
+          <p style={{ color: C.gray, fontSize: 13, marginTop: 16 }}>✓ Gratuito ✓ 2 minutos ✓ Sem cadastro</p>
         </Section>
 
-        {/* PROBLEMA */}
-        <Section bg="#fff">
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <p style={{ margin: "0 0 8px", fontSize: "12px", fontWeight: "700", color: "#ef4444", letterSpacing: "0.1em", textTransform: "uppercase" }}>O problema</p>
-            <h2 style={{ margin: 0, fontSize: "26px", fontWeight: "800", color: "#1a1a1a", lineHeight: 1.3 }}>Você está trabalhando muito e lucrando pouco?</h2>
+        {/* DOR */}
+        <Section>
+          <h2 style={{ fontSize: 28, fontWeight: 700, textAlign: "center", marginBottom: 12, fontFamily: "'Space Grotesk',sans-serif" }}>Você reconhece alguma dessas situações?</h2>
+          <p style={{ color: C.gray, textAlign: "center", marginBottom: 40, fontSize: 15 }}>A maioria dos empreendedores enfrenta isso — mas poucos sabem o impacto real no bolso.</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 640, margin: "0 auto" }}>
+            <PainPoint emoji="😰" text="Trabalha o mês inteiro e no final mal sobra dinheiro" value="Isso geralmente indica margem abaixo do saudável" />
+            <PainPoint emoji="🤷" text="Não sabe se o preço que cobra está certo" value="Preço errado pode custar R$1.000+/mês sem você perceber" />
+            <PainPoint emoji="📉" text="Não tem clareza de quantas vendas precisa por dia" value="Sem meta diária, você navega no escuro" />
+            <PainPoint emoji="🏃" text="Sente que trabalha muito mas o negócio não cresce" value="Pode ser problema de ticket, margem ou ociosidade" />
+            <PainPoint emoji="💸" text="Tem medo de aumentar o preço e perder clientes" value="Na maioria dos nichos, reajuste de 15% não afeta volume" />
           </div>
-          {[
-            ["😰", "Não sabe se o faturamento do mês vai cobrir as contas"],
-            ["📉", "Trabalha todos os dias mas o dinheiro nunca sobra"],
-            ["🤷", "Não tem clareza de quantas vendas precisa fazer por dia"],
-            ["💸", "Define preços no achismo, sem saber se está deixando dinheiro na mesa"],
-            ["😓", "Sente que está se esforçando demais pra um resultado que não aparece"],
-          ].map(([emoji, text]) => (
-            <div key={text} style={{ display: "flex", gap: "14px", alignItems: "center", marginBottom: "16px", background: "#fef2f2", borderRadius: "14px", padding: "14px 16px" }}>
-              <span style={{ fontSize: "24px" }}>{emoji}</span>
-              <span style={{ fontSize: "14px", fontWeight: "600", color: "#333" }}>{text}</span>
-            </div>
-          ))}
-          <p style={{ textAlign: "center", margin: "24px 0 0", fontSize: "15px", color: "#666", lineHeight: 1.7 }}>
-            Se você se identificou com pelo menos uma dessas frases, o <strong>BusinessOne</strong> foi feito pra você.
-          </p>
         </Section>
 
         {/* SOLUÇÃO */}
-        <Section bg="#fafafa">
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <p style={{ margin: "0 0 8px", fontSize: "12px", fontWeight: "700", color: "#22c55e", letterSpacing: "0.1em", textTransform: "uppercase" }}>A solução</p>
-            <h2 style={{ margin: 0, fontSize: "26px", fontWeight: "800", color: "#1a1a1a", lineHeight: 1.3 }}>Seu consultor financeiro de bolso</h2>
-          </div>
-          <p style={{ textAlign: "center", fontSize: "15px", color: "#666", lineHeight: 1.7, marginBottom: "32px" }}>
-            O BusinessOne analisa seus números reais — despesas, ticket médio e margem — e te entrega um diagnóstico completo com metas claras e acionáveis.
-          </p>
-          {[
-            ["🎯", "Meta diária, semanal e mensal", "Sabe exatamente quanto precisa vender cada dia pra pagar as contas E ter lucro."],
-            ["📊", "Diagnóstico do seu segmento", "Compara seu ticket e margem com a média do mercado no seu nicho."],
-            ["💡", "Insights personalizados", "Recebe alertas e sugestões baseados nos seus números reais."],
-            ["🔄", "Simulação de cenários", "Veja o que acontece se aumentar o preço, trabalhar mais dias ou mudar a margem."],
-          ].map(([emoji, title, desc]) => (
-            <div key={title} style={{ background: "#fff", borderRadius: "16px", padding: "20px", marginBottom: "12px", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
-              <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "8px" }}>
-                <span style={{ fontSize: "24px" }}>{emoji}</span>
-                <h3 style={{ margin: 0, fontSize: "16px", fontWeight: "800", color: "#1a1a1a" }}>{title}</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: "14px", color: "#666", lineHeight: 1.6, paddingLeft: "36px" }}>{desc}</p>
-            </div>
-          ))}
-          <div style={{ marginTop: "32px" }}>
-            <CTA text="Quero descobrir minha meta →" onClick={goApp} />
+        <Section>
+          <h2 style={{ fontSize: 28, fontWeight: 700, textAlign: "center", marginBottom: 12, fontFamily: "'Space Grotesk',sans-serif" }}>O BusinessOne faz o que um consultor de R$2.000 faria</h2>
+          <p style={{ color: C.gray, textAlign: "center", marginBottom: 40, fontSize: 15 }}>Só que em 2 minutos, por R$47 uma vez, e sem precisar explicar nada pra ninguém.</p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 18 }}>
+            <FeatureCard emoji="🔍" title="Diagnóstico Inteligente" desc="Analisa seu nicho, ticket, margem e despesas. Compara com benchmarks reais e mostra onde você está perdendo dinheiro." />
+            <FeatureCard emoji="💰" title="Quanto Está Deixando na Mesa" desc="Calcula em reais quanto você perde por mês por preço baixo, margem errada ou horários vagos. Dói ver — mas motiva." />
+            <FeatureCard emoji="📋" title="Plano de Ação Semanal" desc="4 semanas de tarefas concretas e personalizadas pro seu nicho. Não é 'aumente seu preço' — é exatamente o que fazer, como e quando." />
+            <FeatureCard emoji="🧮" title="Precificação Reversa" desc="Diz quanto quer ganhar e o app calcula o preço, quantidade de clientes e horas necessárias. Seu negócio ao contrário." />
+            <FeatureCard emoji="⏰" title="Calculadora de Hora Real" desc="Descubra quanto você realmente ganha por hora trabalhada. A maioria se surpreende (negativamente)." />
+            <FeatureCard emoji="📊" title="Dashboard de Saúde Financeira" desc="Score de 0 a 100, semáforos por área, evolução. Uma tela que você vai querer abrir toda semana." />
           </div>
         </Section>
 
-        {/* COMO FUNCIONA */}
-        <Section bg="#fff">
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <p style={{ margin: "0 0 8px", fontSize: "12px", fontWeight: "700", color: "#3b82f6", letterSpacing: "0.1em", textTransform: "uppercase" }}>Como funciona</p>
-            <h2 style={{ margin: 0, fontSize: "26px", fontWeight: "800", color: "#1a1a1a", lineHeight: 1.3 }}>3 passos, 2 minutos</h2>
+        {/* MAIS FERRAMENTAS */}
+        <Section>
+          <h2 style={{ fontSize: 28, fontWeight: 700, textAlign: "center", marginBottom: 40, fontFamily: "'Space Grotesk',sans-serif" }}>18 ferramentas em uma só plataforma</h2>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 18 }}>
+            <FeatureCard emoji="🆚" title="Comparador CLT vs Negócio" desc="Será que compensa ser empreendedor? Veja a comparação honesta com números reais." />
+            <FeatureCard emoji="🏖️" title="Calculadora de Férias" desc="Quanto precisa faturar antes pra tirar férias sem culpa." />
+            <FeatureCard emoji="👥" title="Simulador de Contratação" desc="Vale contratar? Quanto precisa vender a mais pra pagar um funcionário e ainda lucrar." />
+            <FeatureCard emoji="🔄" title="Comparador de Cenários" desc="Compare até 3 cenários lado a lado. Veja qual combinação de preço e volume dá mais resultado." />
+            <FeatureCard emoji="📈" title="Projeção 6 Meses" desc="Veja pra onde seu negócio está indo com crescimento projetado mês a mês." />
+            <FeatureCard emoji="⚖️" title="Ponto de Equilíbrio" desc="Quantas vendas precisa pra cobrir todos os custos. Abaixo disso, prejuízo." />
+            <FeatureCard emoji="📄" title="Relatório PDF Profissional" desc="Baixe um relatório completo pra mostrar pro sócio, contador ou investidor." />
+            <FeatureCard emoji="📝" title="Proposta Comercial" desc="Gere uma proposta bonita em PDF pra enviar aos seus clientes. Profissionalismo que fecha venda." />
+            <FeatureCard emoji="📲" title="Resumo Compartilhável" desc="Compartilhe seu diagnóstico no WhatsApp com um toque." />
           </div>
-          {[
-            ["1️⃣", "Escolha seu segmento", "Selecione o tipo do seu negócio. Isso personaliza os benchmarks e a linguagem do resultado."],
-            ["2️⃣", "Informe seus números", "Despesas mensais, ticket médio e margem desejada. Simples e direto."],
-            ["3️⃣", "Receba seu diagnóstico", "Meta diária, score financeiro, insights e simulações — tudo na hora."],
-          ].map(([num, title, desc]) => (
-            <div key={title} style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
-              <span style={{ fontSize: "32px" }}>{num}</span>
-              <div>
-                <h3 style={{ margin: "0 0 4px", fontSize: "16px", fontWeight: "800", color: "#1a1a1a" }}>{title}</h3>
-                <p style={{ margin: 0, fontSize: "14px", color: "#666", lineHeight: 1.6 }}>{desc}</p>
-              </div>
-            </div>
-          ))}
-        </Section>
-
-        {/* PRO FEATURES */}
-        <Section bg="linear-gradient(160deg, #0f0f0f 0%, #1a1205 100%)">
-          <div style={{ textAlign: "center", marginBottom: "32px" }}>
-            <span style={{ background: "linear-gradient(135deg, #FF6B35, #ff8c42)", color: "#fff", fontSize: "12px", fontWeight: "800", padding: "6px 14px", borderRadius: "8px", letterSpacing: "0.05em" }}>VERSÃO COMPLETA</span>
-            <h2 style={{ margin: "16px 0 8px", fontSize: "26px", fontWeight: "800", color: "#fff", lineHeight: 1.3 }}>Vá além do diagnóstico básico</h2>
-            <p style={{ margin: 0, fontSize: "15px", color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>Ferramentas avançadas pra quem quer levar o negócio a sério.</p>
-          </div>
-          {[
-            ["📊", "Comparador de cenários", "Teste até 3 cenários lado a lado — mude ticket, margem e dias úteis e veja o impacto na hora."],
-            ["📄", "Relatório em PDF", "Baixe um relatório profissional com todos os dados do seu diagnóstico pra consultar ou mostrar pro sócio."],
-            ["🎯", "Calculadora de reajuste", "Descubra exatamente quantas vendas a menos você precisa se aumentar o preço em 10%, 20%, 50%..."],
-            ["📈", "Projeção de 6 meses", "Veja como um reajuste gradual de preço melhora sua vida mês a mês, reduzindo a carga de trabalho."],
-            ["⚖️", "Ponto de equilíbrio", "Saiba o mínimo de vendas pra cobrir seus custos — e quantas vendas acima disso geram lucro puro."],
-            ["📱", "Resumo compartilhável", "Gere um resumo pronto pra enviar por WhatsApp ou postar nas redes sociais."],
-          ].map(([emoji, title, desc]) => (
-            <div key={title} style={{ background: "rgba(255,255,255,0.05)", borderRadius: "16px", padding: "18px", marginBottom: "10px", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "6px" }}>
-                <span style={{ fontSize: "22px" }}>{emoji}</span>
-                <h3 style={{ margin: 0, fontSize: "15px", fontWeight: "800", color: "#fff" }}>{title}</h3>
-              </div>
-              <p style={{ margin: 0, fontSize: "13px", color: "rgba(255,255,255,0.6)", lineHeight: 1.6, paddingLeft: "34px" }}>{desc}</p>
-            </div>
-          ))}
         </Section>
 
         {/* PREÇO */}
-        <Section bg="#fff">
-          <div style={{ textAlign: "center" }}>
-            <p style={{ margin: "0 0 8px", fontSize: "12px", fontWeight: "700", color: "#FF6B35", letterSpacing: "0.1em", textTransform: "uppercase" }}>Investimento</p>
-            <h2 style={{ margin: "0 0 24px", fontSize: "26px", fontWeight: "800", color: "#1a1a1a" }}>Quanto custa ter clareza financeira?</h2>
-          </div>
-
-          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", justifyContent: "center" }}>
+        <Section style={{ textAlign: "center" }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 12, fontFamily: "'Space Grotesk',sans-serif" }}>Quanto custa?</h2>
+          <p style={{ color: C.gray, marginBottom: 48, fontSize: 16 }}>Menos que um almoço de negócios. Mais valor que uma consultoria de R$2.000.</p>
+          <div style={{ display: "flex", gap: 24, justifyContent: "center", flexWrap: "wrap", maxWidth: 700, margin: "0 auto" }}>
             {/* Free */}
-            <div style={{ background: "#fafafa", borderRadius: "20px", padding: "24px", flex: "1 1 280px", maxWidth: "320px", border: "2px solid #eee" }}>
-              <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: "700", color: "#888" }}>Versão Gratuita</p>
-              <p style={{ margin: "0 0 16px", fontSize: "36px", fontWeight: "800", color: "#1a1a1a", fontFamily: "'Space Grotesk'" }}>R$0</p>
-              <Check>Diagnóstico básico</Check>
-              <Check>Meta diária e mensal</Check>
-              <Check>Score financeiro</Check>
-              <Check>2 simulações simples</Check>
-              <button onClick={goApp} style={{
-                width: "100%", padding: "14px", background: "transparent", color: "#333",
-                border: "2px solid #ddd", borderRadius: "14px", fontSize: "14px",
-                fontWeight: "700", cursor: "pointer", fontFamily: "'Sora', sans-serif", marginTop: "8px"
-              }}>Começar grátis</button>
+            <div style={{ background: C.card, borderRadius: 20, padding: 36, border: "1px solid #222", flex: "1 1 280px", maxWidth: 320, textAlign: "left" }}>
+              <p style={{ color: C.gray, fontSize: 14, fontWeight: 600, marginBottom: 8 }}>GRATUITO</p>
+              <p style={{ fontSize: 40, fontWeight: 800, marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>R$0</p>
+              <p style={{ color: C.gray, fontSize: 14, marginBottom: 28 }}>pra sempre</p>
+              <Check>Diagnóstico básico com meta diária</Check>
+              <Check>Score financeiro de 0 a 100</Check>
+              <Check>Benchmarks do seu nicho</Check>
+              <Check>2 simulações de cenário</Check>
+              <button onClick={goApp} style={{ ...btnOutline, width: "100%", marginTop: 12 }}>Começar grátis</button>
             </div>
-
             {/* Pro */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "24px", flex: "1 1 280px", maxWidth: "320px", border: "2px solid #FF6B35", position: "relative", boxShadow: "0 8px 40px rgba(255,107,53,0.15)" }}>
-              <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "linear-gradient(135deg, #FF6B35, #ff8c42)", color: "#fff", fontSize: "11px", fontWeight: "800", padding: "4px 14px", borderRadius: "8px" }}>MAIS POPULAR</div>
-              <p style={{ margin: "0 0 4px", fontSize: "13px", fontWeight: "700", color: "#FF6B35" }}>Versão Completa</p>
-              <p style={{ margin: "0 0 4px", fontSize: "36px", fontWeight: "800", color: "#1a1a1a", fontFamily: "'Space Grotesk'" }}>R$47</p>
-              <p style={{ margin: "0 0 16px", fontSize: "12px", color: "#888" }}>Pagamento único · Acesso vitalício</p>
-              <Check>Tudo da versão gratuita</Check>
-              <Check>Comparador de 3 cenários</Check>
-              <Check>Relatório PDF profissional</Check>
-              <Check>Calculadora de reajuste</Check>
-              <Check>Projeção de 6 meses</Check>
-              <Check>Ponto de equilíbrio</Check>
-              <Check>Resumo compartilhável</Check>
-              <button onClick={() => window.open('https://pay.kiwify.com.br/oi816Px', '_blank')} style={{
-                width: "100%", padding: "14px", background: "linear-gradient(135deg, #FF6B35, #ff8c42)", color: "#fff",
-                border: "none", borderRadius: "14px", fontSize: "15px",
-                fontWeight: "800", cursor: "pointer", fontFamily: "'Sora', sans-serif", marginTop: "8px",
-                boxShadow: "0 4px 20px rgba(255,107,53,0.4)"
-              }}>Quero acesso completo →</button>
+            <div style={{ background: "linear-gradient(135deg, #1a1008, #1a1410)", borderRadius: 20, padding: 36, border: `2px solid ${C.accent}`, flex: "1 1 280px", maxWidth: 320, textAlign: "left", position: "relative" }}>
+              <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)", background: C.accent, color: "#fff", fontSize: 12, fontWeight: 700, padding: "5px 18px", borderRadius: 100 }}>MAIS VENDIDO</div>
+              <p style={{ color: C.accent, fontSize: 14, fontWeight: 600, marginBottom: 8 }}>COMPLETO</p>
+              <p style={{ fontSize: 40, fontWeight: 800, marginBottom: 4, fontFamily: "'Space Grotesk',sans-serif" }}>R$47</p>
+              <p style={{ color: C.gray, fontSize: 14, marginBottom: 28 }}>pagamento único · acesso vitalício</p>
+              <Check>Tudo do plano gratuito</Check>
+              <Check>18 ferramentas completas</Check>
+              <Check>Plano de ação de 30 dias personalizado</Check>
+              <Check>Calculadora "quanto deixo na mesa"</Check>
+              <Check>Proposta comercial em PDF</Check>
+              <Check>Diagnóstico inteligente com receitas</Check>
+              <Check>Atualizações futuras incluídas</Check>
+              <button onClick={goPay} style={{ ...btnStyle, width: "100%", marginTop: 12 }}>Quero acesso completo</button>
             </div>
+          </div>
+        </Section>
+
+        {/* GARANTIA */}
+        <Section style={{ textAlign: "center" }}>
+          <div style={{ background: "#0a1a0a", border: "1px solid #1a3a1a", borderRadius: 20, padding: 40, maxWidth: 600, margin: "0 auto" }}>
+            <span style={{ fontSize: 48 }}>🛡️</span>
+            <h3 style={{ fontSize: 22, fontWeight: 700, marginTop: 16, marginBottom: 12 }}>Garantia de 7 dias</h3>
+            <p style={{ color: C.gray, fontSize: 15, lineHeight: 1.7 }}>Se em 7 dias você sentir que o BusinessOne não valeu cada centavo, devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia.</p>
           </div>
         </Section>
 
         {/* FAQ */}
-        <Section bg="#fafafa">
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
-            <h2 style={{ margin: 0, fontSize: "26px", fontWeight: "800", color: "#1a1a1a" }}>Perguntas frequentes</h2>
+        <Section>
+          <h2 style={{ fontSize: 28, fontWeight: 700, textAlign: "center", marginBottom: 40, fontFamily: "'Space Grotesk',sans-serif" }}>Perguntas frequentes</h2>
+          <div style={{ maxWidth: 640, margin: "0 auto" }}>
+            <FAQ q="Funciona pra qualquer tipo de negócio?" a="Sim. O BusinessOne tem benchmarks para 8 segmentos: beleza, saúde, educação, consultoria, alimentação, varejo, serviços e outros. O diagnóstico se adapta ao seu nicho." />
+            <FAQ q="Preciso instalar alguma coisa?" a="Não. Funciona 100% no navegador, no celular ou computador. Basta acessar o link." />
+            <FAQ q="O pagamento é mensal?" a="Não. É pagamento único de R$47. Você paga uma vez e tem acesso vitalício, incluindo atualizações futuras." />
+            <FAQ q="Como recebo o acesso?" a="Imediatamente após o pagamento, você recebe um código de acesso por e-mail. Basta digitar o código no app e todas as ferramentas PRO são desbloqueadas na hora." />
+            <FAQ q="E se eu não gostar?" a="Sem problema. Você tem 7 dias de garantia incondicional. Devolvemos 100% do valor sem perguntas." />
+            <FAQ q="Consigo ver alguma coisa antes de pagar?" a="Sim! O diagnóstico básico é 100% gratuito. Você vê sua meta diária, score financeiro e benchmarks sem pagar nada. O plano completo desbloqueia as 18 ferramentas." />
           </div>
-          <FAQ q="A calculadora é realmente gratuita?" a="Sim! O diagnóstico básico com meta diária, score financeiro e insights é 100% gratuito, sem cadastro. A versão completa com ferramentas avançadas é R$47 (pagamento único)." />
-          <FAQ q="Funciona pra qualquer tipo de negócio?" a="Sim. Temos benchmarks personalizados pra 8 segmentos diferentes: beleza, saúde, educação, consultoria, alimentação, varejo, serviços gerais e outros. Se seu nicho não estiver na lista, use 'Outro segmento'." />
-          <FAQ q="O que eu recebo ao pagar R$47?" a="Acesso vitalício a todas as ferramentas PRO: comparador de cenários, relatório PDF, calculadora de reajuste, projeção de 6 meses, ponto de equilíbrio e resumo compartilhável." />
-          <FAQ q="Como funciona o acesso?" a="Após o pagamento, você recebe um código de acesso por email. Basta digitar o código na calculadora e todas as ferramentas PRO são desbloqueadas instantaneamente." />
-          <FAQ q="O acesso expira?" a="Não. O pagamento é único e o acesso é vitalício. Use quantas vezes quiser, pra sempre." />
-          <FAQ q="Posso usar no celular?" a="Sim! A ferramenta é totalmente responsiva e funciona perfeitamente no celular, tablet e computador." />
         </Section>
 
         {/* CTA FINAL */}
-        <Section bg="linear-gradient(160deg, #0f0f0f 0%, #1a1205 100%)">
-          <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <h2 style={{ margin: "0 0 12px", fontSize: "26px", fontWeight: "800", color: "#fff", lineHeight: 1.3 }}>Pare de trabalhar no escuro</h2>
-            <p style={{ margin: "0 0 28px", fontSize: "15px", color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>
-              Descubra agora quanto você realmente precisa vender por dia. É grátis, leva 2 minutos e pode mudar a forma como você enxerga seu negócio.
-            </p>
-            <CTA text="Fazer meu diagnóstico grátis →" onClick={goApp} />
-          </div>
+        <Section style={{ textAlign: "center", paddingBottom: 40 }}>
+          <h2 style={{ fontSize: 32, fontWeight: 800, marginBottom: 16, fontFamily: "'Space Grotesk',sans-serif" }}>Pronto pra descobrir quanto seu negócio <span style={{ color: C.accent }}>realmente</span> precisa faturar?</h2>
+          <p style={{ color: C.gray, fontSize: 16, marginBottom: 36, maxWidth: 500, margin: "0 auto 36px" }}>2 minutos. Sem cadastro. Diagnóstico na hora.</p>
+          <button onClick={goApp} style={btnStyle} onMouseEnter={e => e.target.style.transform = "scale(1.04)"} onMouseLeave={e => e.target.style.transform = "scale(1)"}>Começar agora — é grátis</button>
         </Section>
 
         {/* FOOTER */}
-        <footer style={{ background: "#0a0a0a", padding: "24px 20px", textAlign: "center" }}>
-          <p style={{ margin: 0, fontSize: "12px", color: "rgba(255,255,255,0.3)" }}>© {new Date().getFullYear()} BusinessOne · Todos os direitos reservados</p>
+        <footer style={{ borderTop: "1px solid #1a1a1a", padding: "30px 20px", textAlign: "center" }}>
+          <p style={{ color: "#444", fontSize: 13 }}>BusinessOne © 2025 · Todos os direitos reservados</p>
         </footer>
-
       </div>
     </>
   );
