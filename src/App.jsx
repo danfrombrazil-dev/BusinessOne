@@ -356,7 +356,8 @@ export default function App() {
                 <p style={{ margin: "0 0 4px", fontSize: "14px", color: "#888" }}>Pague uma vez, use para sempre</p>
                 <p style={{ margin: "8px 0 0", fontSize: "48px", fontWeight: "800", color: "#FF6B35", fontFamily: "'Space Grotesk', sans-serif" }}>R$47</p>
               </div>
-              <button style={S.btn}>Pagar com Pix ou Cartão</button>
+              <button style={S.btn} onClick={() => window.open('https://pay.kiwify.com.br/oi816Px', '_blank')}>Pagar com Pix ou Cartão</button>
+
               <button style={S.btnGhost} onClick={() => setShowPro(false)}>← Voltar ao resultado</button>
               <p style={{ textAlign: "center", fontSize: "11px", color: "#bbb", marginTop: "12px" }}>Pagamento seguro · Acesso imediato</p>
             </div>
